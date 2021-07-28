@@ -1,0 +1,67 @@
+
+   CREATE TABLE EMP_CUST_FIRST (
+   NAME CHAR(20));
+  
+   CREATE TABLE EMP_CUST_DESC (
+   DESCR CHAR(20));
+  
+   CREATE TABLE EMP_CUST_LAST (
+   NAME CHAR(20));
+  
+  
+  CREATE OR REPLACE FUNCTION randomdescr
+  RETURN VARCHAR2
+  IS
+     l_res CHAR(20);
+  BEGIN
+    SELECT *
+      INTO l_res
+      FROM (select * from EMP_CUST_DESC order by dbms_random.value) where rownum = 1;
+    RETURN l_res;
+  END;
+  /
+COMMIT;
+  
+  
+CREATE OR REPLACE FUNCTION randomfirstname
+  RETURN VARCHAR2
+  IS
+     l_res CHAR(20);
+  BEGIN
+    SELECT *
+      INTO l_res
+      FROM (select * from EMP_CUST_FIRST order by dbms_random.value) where rownum = 1;
+    RETURN l_res;
+  END;
+  /
+COMMIT;
+  
+  
+  CREATE OR REPLACE FUNCTION randomlastname
+  RETURN VARCHAR2
+  IS
+     l_res CHAR(20);
+  BEGIN
+    SELECT *
+      INTO l_res
+      FROM (select * from EMP_CUST_LAST order by dbms_random.value) where rownum = 1;
+    RETURN l_res;
+  END;
+  /
+COMMIT;
+  
+  
+  INSERT INTO SA_CUSTOMERS.SA_CUSTOMERS 
+  
+  SELECT ROWNUM,
+  randomdescr,
+  randomfirstname,
+  randomlastname,
+  round(DBMS_RANDOM.VALUE(18,100),0),
+  'male'
+  FROM dual
+  CONNECT BY LEVEL <= 100000;
+  
+  
+  
+ 
