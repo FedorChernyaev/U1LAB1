@@ -1,0 +1,171 @@
+CREATE TABLE EMP_CUST_FIRST (
+   NAME CHAR(20));
+  
+   CREATE TABLE EMP_CUST_DESC (
+   DESCR CHAR(20));
+  
+   CREATE TABLE EMP_CUST_LAST (
+   NAME CHAR(20));
+  
+  
+  CREATE OR REPLACE FUNCTION randomdescr
+  RETURN VARCHAR2
+  IS
+     res CHAR(20);
+  BEGIN
+    SELECT *
+      INTO res
+      FROM (select * from EMP_CUST_DESC order by dbms_random.value) where rownum = 1;
+    RETURN res;
+  END;
+  /
+COMMIT;
+  
+  
+CREATE OR REPLACE FUNCTION randomfirstname
+  RETURN VARCHAR2
+  IS
+     res CHAR(20);
+  BEGIN
+    SELECT *
+      INTO res
+      FROM (select * from EMP_CUST_FIRST order by dbms_random.value) where rownum = 1;
+    RETURN res;
+  END;
+  /
+COMMIT;
+  
+  
+  CREATE OR REPLACE FUNCTION randomlastname
+  RETURN VARCHAR2
+  IS
+     res CHAR(20);
+  BEGIN
+    SELECT *
+      INTO res
+      FROM (select * from EMP_CUST_LAST order by dbms_random.value) where rownum = 1;
+    RETURN res;
+  END;
+  /
+COMMIT;
+  
+  
+  truncate table SA_CUSTOMERS.SA_CUSTOMERS;
+  
+  INSERT INTO SA_CUSTOMERS.SA_CUSTOMERS 
+  
+  SELECT ROWNUM,
+  randomdescr,
+  randomfirstname,
+  randomlastname,
+  round(DBMS_RANDOM.VALUE(18,100),0),
+  'male'
+  FROM dual
+  CONNECT BY LEVEL <= 100000;
+  
+  
+  
+  
+  create table BIKE_BRANDS (
+  NAME CHAR(20));
+  
+  create table BIKE_MODELS (
+  NAME CHAR(20) );
+  
+  create table BIKE_SPEC_ID (
+  ID_ID NUMBER );
+  
+  
+  
+  CREATE OR REPLACE FUNCTION randombrand
+  RETURN VARCHAR2
+  IS
+     res CHAR(20);
+  BEGIN
+    SELECT *
+      INTO res
+      FROM (select * from BIKE_BRANDS order by dbms_random.value) where rownum = 1;
+    RETURN res;
+  END;
+  /
+COMMIT;
+  
+  CREATE OR REPLACE FUNCTION randommodel
+  RETURN VARCHAR2
+  IS
+     res CHAR(20);
+  BEGIN
+    SELECT *
+      INTO res
+      FROM (select * from BIKE_MODELS order by dbms_random.value) where rownum = 1;
+    RETURN res;
+  END;
+  /
+COMMIT;
+  
+   CREATE OR REPLACE FUNCTION randomspec
+  RETURN NUMBER
+  IS
+     res NUMBER;
+     BEGIN
+    SELECT *
+      INTO res
+      FROM (select * from BIKE_SPEC_ID order by dbms_random.value) where rownum = 1;
+    RETURN res;
+  END;
+  /
+COMMIT;
+  
+ 
+  
+  
+  INSERT INTO SA_EMPLOYEE.SA_EMPLOYEE 
+  
+  SELECT ROWNUM,
+  randomdescr,
+  randomfirstname,
+  randomlastname
+  FROM dual
+  CONNECT BY LEVEL <= 100000;
+  
+  
+  
+  
+  
+  INSERT INTO SA_BIKES.SA_BIKES 
+  SELECT ROWNUM,
+  randombrand,
+  randommodel,
+  TO_CHAR(randomspec),
+  round(DBMS_RANDOM.VALUE(0,20),0),
+  round(DBMS_RANDOM.VALUE(0,20000),0)
+  FROM dual
+  CONNECT BY LEVEL <= 100000;
+  
+   SELECT TO_DATE(
+              TRUNC(
+                   DBMS_RANDOM.VALUE(TO_CHAR(DATE '2018-01-01','J')
+                                    ,TO_CHAR(DATE '2020-12-31','J')
+                                    )
+                    ),'J'
+               ) FROM DUAL CONNECT BY LEVEL <= 100;
+               
+               
+               
+               
+  INSERT INTO SA_SALES.SA_SALES
+  
+  SELECT 
+  TO_DATE(
+              TRUNC(
+                   DBMS_RANDOM.VALUE(TO_CHAR(DATE '2018-01-01','J')
+                                    ,TO_CHAR(DATE '2020-12-31','J')
+                                    )
+                    ),'J'
+               ),
+               ROWNUM,
+  round(DBMS_RANDOM.VALUE(1,100),0),
+  round(DBMS_RANDOM.VALUE(2000,100000),0)
+  FROM dual
+  CONNECT BY LEVEL <= 100000;
+  
